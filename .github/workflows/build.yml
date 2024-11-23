@@ -1,0 +1,44 @@
+name: Build & CI Test
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+
+      # Realizar análisis con SonarQube
+      - uses: sonarsource/sonarqube-scan-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++  # Instalar dependencias necesarias como cmake y g++
+
+      - name: Configure CMake
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build the project
+        run: |
+          cmake --build build --config Release
+
+      - name: Run tests
+        run: |
+          cd build
+          ctest --output-on-failure
+
+      - name: Upload Coverage to SonarQube
+        run: |
+          curl -sS -X POST -d @build/coverage/coverage.json -H "Content-Type: application/json" "${{ secrets.SONAR_HOST_URL }}/api/coverage/upload?project=${{ github.repository }}"
