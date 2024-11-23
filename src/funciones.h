@@ -1,0 +1,128 @@
+#ifndef FUNCIONES_H
+#define FUNCIONES_H
+
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+
+namespace mynamespace {
+
+// Función para leer el contenido de un archivo
+std::string leerArchivo(const std::string &nombreArchivo) {
+    std::ifstream archivo(nombreArchivo);
+    if (!archivo) {
+        std::cerr << "Error al abrir el archivo: " << nombreArchivo << std::endl;
+        return "";
+    }
+    return std::string((std::istreambuf_iterator<char>(archivo)),
+                       std::istreambuf_iterator<char>());
+}
+
+// Función para construir el array LPS para el algoritmo KMP
+void construirLPS(const std::string &patron, std::vector<int> &lps) {
+    int longitud = 0;
+    size_t i = 1;
+    lps[0] = 0;
+
+    while (i < patron.length()) {
+        if (patron[i] == patron[longitud]) {
+            longitud++;
+            lps[i] = longitud;
+            i++;
+        } else {
+            if (longitud != 0) {
+                longitud = lps[longitud - 1];
+            } else {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
+// Algoritmo KMP para buscar el patrón en el texto
+bool KMP(const std::string &texto, const std::string &patron, size_t &pos) {
+    int n = texto.length();
+    int m = patron.length();
+    std::vector<int> lps(m, 0);
+    construirLPS(patron, lps);
+
+    int i = 0, j = 0;
+    while (i < n) {
+        if (patron[j] == texto[i]) {
+            i++;
+            j++;
+        }
+        if (j == m) {
+            pos = i - j;
+            return true;
+        } else if (i < n && patron[j] != texto[i]) {
+            if (j != 0) {
+                j = lps[j - 1];
+            } else {
+                i++;
+            }
+        }
+    }
+    return false;
+}
+
+// Función para verificar el palíndromo más largo en una cadena
+std::pair<std::pair<int, int>, std::string> palindromoMasLargo(const std::string &cadena) {
+    int n = cadena.size();
+    std::pair<int, int> resultado = {0, 0};
+    int maxLen = 1;
+    std::string palindromo;
+
+    for (int i = 0; i < n; ++i) {
+        int l = i, r = i;
+        while (l >= 0 && r < n && cadena[l] == cadena[r]) {
+            if (r - l + 1 > maxLen) {
+                maxLen = r - l + 1;
+                resultado = {l, r};
+                palindromo = cadena.substr(l, r - l + 1);
+            }
+            l--;
+            r++;
+        }
+
+        l = i, r = i + 1;
+        while (l >= 0 && r < n && cadena[l] == cadena[r]) {
+            if (r - l + 1 > maxLen) {
+                maxLen = r - l + 1;
+                resultado = {l, r};
+                palindromo = cadena.substr(l, r - l + 1);
+            }
+            l--;
+            r++;
+        }
+    }
+    return {resultado, palindromo};
+}
+
+// Función para encontrar el substring común más largo entre dos cadenas
+std::pair<std::pair<int, int>, std::string> substringComunMasLargo(const std::string &cadena1, const std::string &cadena2) {
+    int m = cadena1.size(), n = cadena2.size();
+    std::vector<std::vector<int>> dp(m + 1, std::vector<int>(n + 1, 0));
+    int maxLen = 0, endPos1 = 0;
+    std::string substring;
+
+    for (int i = 1; i <= m; ++i) {
+        for (int j = 1; j <= n; ++j) {
+            if (cadena1[i - 1] == cadena2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                if (dp[i][j] > maxLen) {
+                    maxLen = dp[i][j];
+                    endPos1 = i;
+                    substring = cadena1.substr(i - maxLen, maxLen);
+                }
+            }
+        }
+    }
+    return {{endPos1 - maxLen + 1, endPos1}, substring};
+}
+
+} // namespace mynamespace
+
+#endif
