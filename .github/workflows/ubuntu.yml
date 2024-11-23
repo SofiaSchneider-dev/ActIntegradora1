@@ -2,37 +2,43 @@ name: Ubuntu CI Test
 
 on:
   push:
-    branches: [ main, master, dev ]
+    branches:
+      - main
+      - master
+      - dev
   pull_request:
-    branches: [ main, master, dev ]
+    branches:
+      - main
+      - master
+      - dev
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up CMake
+        uses: cmake/setup-cmake@v3
+        with:
+          cmake-version: '3.22'
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake g++ gcovr
+          sudo apt update
+          sudo apt install -y build-essential gcovr  # Instala gcovr para cobertura de código
 
-      - name: prepare
-        run: |
-          make prepare  # Ajusta este paso según sea necesario
+      - name: Configure build
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=On
 
-      - name: Configure CMake
+      - name: Build and test
         run: |
-          cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=On
-
-      - name: building and testing
-        run: |
-          cmake --build build --config Debug --target coverage -j4
+          cmake --build build --config Debug --target coverage -j4  # Compila el proyecto
           cd build
-          ctest .
+          ctest .  # Ejecuta las pruebas
 
-      - name: Code Coverage Report
+      - name: Generate coverage report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
           filename: build/coverage/coverage.cobertura.xml
@@ -45,7 +51,7 @@ jobs:
           output: both
           thresholds: '60 80'
 
-      - name: Add Coverage PR Comment
+      - name: Add coverage PR comment
         uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request'
         with:
