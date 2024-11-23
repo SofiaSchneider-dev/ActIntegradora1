@@ -1,25 +1,57 @@
-#define CATCH_CONFIG_MAIN  // Necesario para que Catch2 genere la función main()
-#include <catch2/catch.hpp>
-#include "../src/funciones.h"  // Asegúrate de que el path sea correcto
+#include <catch2/catch_test_macros.hpp>
+#include "funciones.h"  // Asegúrate de incluir el archivo de cabecera de funciones
 
-using namespace std;  // Agregado para evitar el uso repetido de std::
+using namespace std;
+using namespace mynamespace;  // Si usas un espacio de nombres, agrega esto
 
-TEST_CASE("Test de la función KMP", "[KMP]") {
-    string texto = "abcdef";
-    string patron = "cd";
-    size_t pos;
+TEST_CASE("Prueba de la función leerArchivo") {
+    SECTION("Archivo existente") {
+        // Aquí asumes que el archivo 'transmission1.txt' existe en el directorio adecuado
+        string contenido = leerArchivo("transmission1.txt");
+        REQUIRE_FALSE(contenido.empty());  // Aseguramos que el archivo no está vacío
+    }
 
-    // Comprobamos si KMP encuentra el patrón y devuelve la posición correcta
-    REQUIRE(KMP(texto, patron, pos));  // El patrón debe ser encontrado
-    REQUIRE(pos == 2);  // La posición de inicio del patrón es 2 (empezando desde 0)
+    SECTION("Archivo no existente") {
+        string contenido = leerArchivo("archivo_inexistente.txt");
+        REQUIRE(contenido.empty());  // Aseguramos que el archivo no se pudo leer
+    }
 }
 
-TEST_CASE("Test de palíndromo más largo", "[palindromoMasLargo]") {
-    string texto = "abccba";
-    auto resultado = palindromoMasLargo(texto);
+TEST_CASE("Prueba de la función KMP") {
+    string texto = "Esto es un test";
+    string patron = "test";
+    size_t pos;
 
-    // Comprobamos que el palíndromo más largo es "abccba"
-    REQUIRE(resultado.second == "abccba");
-    REQUIRE(resultado.first.first == 0);  // La posición inicial del palíndromo
-    REQUIRE(resultado.first.second == 5);  // La posición final del palíndromo
+    SECTION("Patrón encontrado") {
+        REQUIRE(KMP(texto, patron, pos) == true);
+        REQUIRE(pos == 14);  // El patrón "test" empieza en la posición 14
+    }
+
+    SECTION("Patrón no encontrado") {
+        string patronNoEncontrado = "noexiste";
+        REQUIRE(KMP(texto, patronNoEncontrado, pos) == false);
+    }
+}
+
+TEST_CASE("Prueba de palíndromo más largo") {
+    string texto = "abacabadabacaba";  // Un palíndromo clásico
+
+    SECTION("Encontrar palíndromo") {
+        auto resultado = palindromoMasLargo(texto);
+        REQUIRE(resultado.first.first == 0);
+        REQUIRE(resultado.first.second == texto.size() - 1);  // El palíndromo cubre toda la cadena
+        REQUIRE(resultado.second == "abacabadabacaba");  // La cadena misma es el palíndromo
+    }
+}
+
+TEST_CASE("Prueba de substring común más largo") {
+    string cadena1 = "abcdef";
+    string cadena2 = "zabcf";
+    auto resultado = substringComunMasLargo(cadena1, cadena2);
+
+    SECTION("Encontrar substring común más largo") {
+        REQUIRE(resultado.first.first == 2);  // La subcadena común empieza en la posición 2 de cadena1
+        REQUIRE(resultado.first.second == 4);  // La subcadena común termina en la posición 4 de cadena1
+        REQUIRE(resultado.second == "bc");  // El substring común más largo es "bc"
+    }
 }

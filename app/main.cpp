@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
-#include "../src/funciones.h"
+#include "funciones.h"  // Ahora se incluye directamente
 
 using namespace std;
+using namespace mynamespace;  // Usando el espacio de nombres para evitar escribirlo cada vez
 
 int main() {
     // Leer los archivos
@@ -39,12 +40,22 @@ int main() {
     // Parte 1: Verificar si transmission1 y transmission2 contienen los códigos maliciosos
     size_t pos;
     cout << "Parte 1: Verificación de códigos maliciosos:" << endl;
-    cout << (KMP(transmission1, mcode1, pos) ? "true " + to_string(pos + 1) : "false") << endl;
-    cout << (KMP(transmission1, mcode2, pos) ? "true " + to_string(pos + 1) : "false") << endl;
-    cout << (KMP(transmission1, mcode3, pos) ? "true " + to_string(pos + 1) : "false") << endl;
-    cout << (KMP(transmission2, mcode1, pos) ? "true " + to_string(pos + 1) : "false") << endl;
-    cout << (KMP(transmission2, mcode2, pos) ? "true " + to_string(pos + 1) : "false") << endl;
-    cout << (KMP(transmission2, mcode3, pos) ? "true " + to_string(pos + 1) : "false") << endl;
+
+    // Calcular los resultados de la verificación
+    string resultado1 = KMP(transmission1, mcode1, pos) ? "true " + to_string(pos + 1) : "false";
+    string resultado2 = KMP(transmission1, mcode2, pos) ? "true " + to_string(pos + 1) : "false";
+    string resultado3 = KMP(transmission1, mcode3, pos) ? "true " + to_string(pos + 1) : "false";
+    string resultado4 = KMP(transmission2, mcode1, pos) ? "true " + to_string(pos + 1) : "false";
+    string resultado5 = KMP(transmission2, mcode2, pos) ? "true " + to_string(pos + 1) : "false";
+    string resultado6 = KMP(transmission2, mcode3, pos) ? "true " + to_string(pos + 1) : "false";
+
+    // Imprimir los resultados
+    cout << resultado1 << endl;
+    cout << resultado2 << endl;
+    cout << resultado3 << endl;
+    cout << resultado4 << endl;
+    cout << resultado5 << endl;
+    cout << resultado6 << endl;
 
     // Parte 2: Encontrar el palíndromo más largo
     auto palindromo1 = palindromoMasLargo(transmission1);
