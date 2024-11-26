@@ -1,0 +1,3 @@
+Sofía Schneider Jiménez A00837196 - Parte 1: Verificación de código malicioso en transmisiones
+Sergio Tomás Vargas Villarrea A00837196 - Parte 2: Búsqueda del palíndromo más largo en transmisiones
+Diego Thomas Gocht Aguero A01384738 - Parte 3: Detección del substring común más largo entre transmisiones
