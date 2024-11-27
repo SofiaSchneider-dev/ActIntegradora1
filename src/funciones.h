@@ -5,10 +5,10 @@
 
 namespace mynamespace {
 
-std::string leerArchivo(const std::string &nombreArchivo);
-void construirLPS(const std::string &patron, std::vector<int> &lps);
-bool KMP(const std::string &texto, const std::string &patron, size_t &pos);
-std::pair<std::pair<int, int>, std::string> palindromoMasLargo(const std::string &cadena);
-std::pair<std::pair<int, int>, std::string> substringComunMasLargo(const std::string &cadena1, const std::string &cadena2);
+std::string leer_archivo(const std::string &nombreArchivo);
+void construir_lps(const std::string &patron, std::vector<int> &lps);
+bool kmp(const std::string &texto, const std::string &patron, size_t &pos);
+std::pair<std::pair<int, int>, std::string> palindromo_mas_largo(const std::string &cadena);
+std::pair<std::pair<int, int>, std::string> substring_comun_mas_largo(const std::string &cadena1, const std::string &cadena2);
 
 } // namespace mynamespace
