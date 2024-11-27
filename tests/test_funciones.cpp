@@ -1,7 +1,8 @@
-#define CATCH_CONFIG_MAIN  
+#define CATCH_CONFIG_MAIN
 #include <catch2/catch_test_macros.hpp>
 #include "funciones.h"
 #include <fstream>
+#include <cstdio> 
 
 using namespace mynamespace;
 
@@ -19,7 +20,6 @@ TEST_CASE("leer_archivo: Cargar archivo correctamente", "[leer_archivo]") {
     const std::string testFilename = "testfile.txt";
     const std::string content = "123ABCDEF";
 
-    // Create test file
     create_test_file(testFilename, content);
 
     std::string resultado = leer_archivo(testFilename);
