@@ -4,7 +4,7 @@
 
 namespace mynamespace {
 
-std::string leerArchivo(const std::string &nombreArchivo) {
+std::string leer_archivo(const std::string &nombreArchivo) {
     std::ifstream archivo(nombreArchivo);
     if (!archivo) {
         std::cerr << "Error al abrir el archivo: " << nombreArchivo << std::endl;
@@ -14,7 +14,7 @@ std::string leerArchivo(const std::string &nombreArchivo) {
                        std::istreambuf_iterator<char>());
 }
 
-void construirLPS(const std::string &patron, std::vector<int> &lps) {
+void construir_lps(const std::string &patron, std::vector<int> &lps) {
     int longitud = 0;
     size_t i = 1;
     lps[0] = 0;
@@ -35,11 +35,11 @@ void construirLPS(const std::string &patron, std::vector<int> &lps) {
     }
 }
 
-bool KMP(const std::string &texto, const std::string &patron, size_t &pos) {
+bool kmp(const std::string &texto, const std::string &patron, size_t &pos) {
     int n = texto.length();
     int m = patron.length();
     std::vector<int> lps(m, 0);
-    construirLPS(patron, lps);
+    construir_lps(patron, lps);
 
     int i = 0, j = 0;
     while (i < n) {
@@ -61,7 +61,7 @@ bool KMP(const std::string &texto, const std::string &patron, size_t &pos) {
     return false;
 }
 
-std::pair<std::pair<int, int>, std::string> palindromoMasLargo(const std::string &cadena) {
+std::pair<std::pair<int, int>, std::string> palindromo_mas_largo(const std::string &cadena) {
     int n = cadena.size();
     if (n == 0) {
         return {{0, 0}, ""};
@@ -101,7 +101,7 @@ std::pair<std::pair<int, int>, std::string> palindromoMasLargo(const std::string
 }
 
 
-std::pair<std::pair<int, int>, std::string> substringComunMasLargo(const std::string &cadena1, const std::string &cadena2) {
+std::pair<std::pair<int, int>, std::string> substring_comun_mas_largo(const std::string &cadena1, const std::string &cadena2) {
     int m = cadena1.size(), n = cadena2.size();
     if (m == 0 || n == 0) {
         return {{0, 0}, ""};
