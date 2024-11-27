@@ -1,21 +1,20 @@
 /*
- * SonarQube, open source software quality management tool.
- * Copyright (C) 2008-2013 SonarSource
- * http://github.com/SonarOpenCommunity/sonar-cxx
- *
- * SonarQube is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * SonarQube is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ * @file main.cpp
+ * @brief Main program for processing transmissions and detecting malicious codes
+ * 
+ * This program reads transmission files and checks for malicious code patterns
+ * and the longest palindrome in transmissions. It also identifies the longest
+ * common substring between two transmission files.
+ * 
+ * @author Sofia Schneider
+ * @date 27 Nov 2024
+ * @version 1.0
+ * 
+ * @license GNU Lesser General Public License v3.0
+ * 
+ * Copyright (C) 2024 Sofia Schneider
+ * This program is distributed under the GNU Lesser General Public License.
+ * See <https://www.gnu.org/licenses/lgpl-3.0.html> for more details.
  */
 #include <iostream>
 #include <string>
