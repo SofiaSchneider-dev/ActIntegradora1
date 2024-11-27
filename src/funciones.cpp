@@ -80,6 +80,22 @@ bool kmp(const std::string &texto, const std::string &patron, size_t &pos) {
     }
     return false;
 }
+std::pair<int, std::string> encontrar_palindromo(const std::string &cadena, int l, int r) {
+    int maxLen = 0;
+    std::string palindromo;
+
+    while (l >= 0 && r < cadena.size() && cadena[l] == cadena[r]) {
+        int len = r - l + 1;
+        if (len > maxLen) {
+            maxLen = len;
+            palindromo = cadena.substr(l, len);
+        }
+        l--;
+        r++;
+    }
+
+    return {maxLen, palindromo};
+}
 
 std::pair<std::pair<int, int>, std::string> palindromo_mas_largo(const std::string &cadena) {
     int n = cadena.size();
@@ -87,39 +103,30 @@ std::pair<std::pair<int, int>, std::string> palindromo_mas_largo(const std::stri
         return {{0, 0}, ""};
     }
 
-    std::pair<int, int> resultado = {0, 0};
     int maxLen = 1;
-    std::string palindromo = cadena.substr(0, 1); // Palíndromo mínimo
+    std::string palindromo = cadena.substr(0, 1);
+    std::pair<int, int> resultado = {0, 0};
 
     for (int i = 0; i < n; ++i) {
         // Palíndromo con centro único
-        int l = i, r = i;
-        while (l >= 0 && r < n && cadena[l] == cadena[r]) {
-            if (r - l + 1 > maxLen) {
-                maxLen = r - l + 1;
-                resultado = {l, r};
-                palindromo = cadena.substr(l, r - l + 1);
-            }
-            l--;
-            r++;
+        auto [len1, pal1] = encontrar_palindromo(cadena, i, i);
+        if (len1 > maxLen) {
+            maxLen = len1;
+            palindromo = pal1;
+            resultado = {i - len1 / 2, i + len1 / 2};
         }
 
         // Palíndromo con centro doble
-        l = i, r = i + 1;
-        while (l >= 0 && r < n && cadena[l] == cadena[r]) {
-            if (r - l + 1 > maxLen) {
-                maxLen = r - l + 1;
-                resultado = {l, r};
-                palindromo = cadena.substr(l, r - l + 1);
-            }
-            l--;
-            r++;
+        auto [len2, pal2] = encontrar_palindromo(cadena, i, i + 1);
+        if (len2 > maxLen) {
+            maxLen = len2;
+            palindromo = pal2;
+            resultado = {i - len2 / 2 + 1, i + len2 / 2};
         }
     }
 
     return {resultado, palindromo};
 }
-
 
 std::pair<std::pair<int, int>, std::string> substring_comun_mas_largo(const std::string &cadena1, const std::string &cadena2) {
     int m = cadena1.size(), n = cadena2.size();
@@ -150,6 +157,5 @@ std::pair<std::pair<int, int>, std::string> substring_comun_mas_largo(const std:
 
     return {{endPos1 - maxLen + 1, endPos1}, substring};
 }
-
 
 } // namespace mynamespace
