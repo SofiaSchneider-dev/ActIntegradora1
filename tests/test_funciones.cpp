@@ -93,3 +93,9 @@ TEST_CASE("substring_comun_mas_largo: Sin substring común", "[substring_comun_m
     REQUIRE(resultado.first.first == 0);
     REQUIRE(resultado.first.second == 0);
 }
+
+TEST_CASE("leer_archivo: Non-existent file", "[leer_archivo]") {
+    const std::string nonExistentFile = "nonexistent_file.txt";
+    std::string resultado = leer_archivo(nonExistentFile);
+    REQUIRE(resultado.empty()); 
+}
